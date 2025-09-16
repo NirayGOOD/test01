@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title></title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				min-height: 200vh;
+				color: #fff;
+				background-color: gray;
+				overflow-x: hidden;
+			}
+
+			.container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 20px;
+			}
+
+			.fixed-square {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 300px;
+				height: 300px;
+				border-radius: 15px;
+				transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+				z-index: 100;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: white;
+				font-size: 24px;
+				font-weight: bold;
+				text-align: center;
+				background-color: brown;
+			}
+
+			.scrolled .fixed-square {
+				width: 150px;
+				height: 150px;
+				font-size: 16px;
+			}
+
+			.section-visible .fixed-square {
+				opacity: 0;
+				visibility: hidden;
+				transform: translate(-50%, -50%) scale(0.5);
+			}
+
+			.nav-menu {
+				position: fixed;
+				top: -100px;
+				left: 50%;
+				transform: translateX(-50%);
+				width: 80%;
+				max-width: 800px;
+				height: 70px;
+				background-color: white;
+				border-radius: 15px 15px 15px 15px;
+				box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+				transition: top 0.5s ease;
+				z-index: 90;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.scrolled .nav-menu {
+				top: 0;
+			}
+
+			.nav-menu ul {
+				display: flex;
+				list-style: none;
+				gap: 10px;
+			}
+
+			.nav-menu a {
+				text-decoration: none;
+				transition: color 0.3s ease;
+				padding: 8px 16px;
+				border-radius: 20px;
+			}
+
+			.content {
+				padding-top: 100vh;
+				padding-bottom: 100px;
+				color: white;
+				text-align: center;
+			}
+
+			.content h2 {
+				margin-bottom: 30px;
+			}
+
+			.content p {
+				max-width: 800px;
+				margin: 0 auto 30px;
+			}
+
+			.scroll-indicator {
+				position: fixed;
+				bottom: 30px;
+				left: 50%;
+				transform: translateX(-50%);
+				text-align: center;
+				padding: 10px 20px;
+				border-radius: 20px;
+				z-index: 80;
+				animation: bounce 2s infinite;
+			}
+
+			@keyframes bounce {
+				0%,
+				20%,
+				50%,
+				80%,
+				100% {
+					transform: translateX(-50%) translateY(0);
+				}
+				40% {
+					transform: translateX(-50%) translateY(-10px);
+				}
+				60% {
+					transform: translateX(-50%) translateY(-5px);
+				}
+			}
+
+			.logo {
+				position: absolute;
+				left: 20px;
+				font-size: 22px;
+			}
+
+			.section {
+				min-height: 100vh;
+				padding: 100px 20px;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.section h2 {
+				margin-bottom: 30px;
+				text-align: center;
+			}
+
+			.section p {
+				max-width: 800px;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="fixed-square">Это бокал</div>
+		<nav class="nav-menu">
+			<ul>
+				<li><a href="#section1">Главная</a></li>
+				<li><a href="#section2">О нас</a></li>
+				<li><a href="#section3">Услуги</a></li>
+				<li><a href="#section4">Контакты</a></li>
+			</ul>
+		</nav>
+
+		<section id="section1" class="section"></section>
+
+		<section id="section2" class="section">
+			<h2>Lorem, ipsum.</h2>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
+				cupiditate voluptatem nobis laudantium et pariatur!
+			</p>
+		</section>
+
+		<section id="section3" class="section">
+			<h2>Lorem, ipsum.</h2>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
+				cupiditate voluptatem nobis laudantium et pariatur!
+			</p>
+		</section>
+
+		<section id="section4" class="section">
+			<h2>Lorem, ipsum.</h2>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
+				cupiditate voluptatem nobis laudantium et pariatur!
+			</p>
+		</section>
+
+		<script>
+			window.addEventListener('scroll', function () {
+				const body = document.body
+				const scrollPosition = window.scrollY
+				const sections = document.querySelectorAll('.section')
+				const square = document.querySelector('.fixed-square')
+
+				if (scrollPosition > 100) {
+					body.classList.add('scrolled')
+				} else {
+					body.classList.remove('scrolled')
+				}
+
+				let currentSection = null
+				sections.forEach((section) => {
+					const rect = section.getBoundingClientRect()
+					if (
+						rect.top <= window.innerHeight / 2 &&
+						rect.bottom >= window.innerHeight / 2
+					) {
+						currentSection = section
+					}
+				})
+				if (currentSection && currentSection.id !== 'section1') {
+					body.classList.add('section-visible')
+				} else {
+					body.classList.remove('section-visible')
+				}
+			})
+
+			document.querySelectorAll('nav a').forEach((anchor) => {
+				anchor.addEventListener('click', function (e) {
+					e.preventDefault()
+
+					const targetId = this.getAttribute('href')
+					const targetElement = document.querySelector(targetId)
+
+					window.scrollTo({
+						top: targetElement.offsetTop,
+						behavior: 'smooth',
+					})
+				})
+			})
+		</script>
+	</body>
+</html>
